@@ -7,7 +7,6 @@ namespace TerrainGenerator
     [System.Serializable]
     public class NoiseData
     {
-        public int size = 32;
         public float scale = 2.0f;
         public float2 offset;
 
@@ -21,8 +20,6 @@ namespace TerrainGenerator
 
         public bool Validate()
         {
-            if (size < 2)
-                return false;
             if (scale <= 0.0f)
                 return false;
             if (seed < 1)

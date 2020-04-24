@@ -4,7 +4,7 @@ namespace TerrainGenerator
 {
     public static class NoiseMap
     {
-        public static float[,] Generate(NoiseData noiseData)
+        public static float[,] Generate(int resolution, NoiseData noiseData)
         {
             if (!noiseData.Validate())
             {
@@ -12,9 +12,9 @@ namespace TerrainGenerator
                 return null;
             }
 
-            float[,] noiseMap = new float[noiseData.size, noiseData.size];
+            float[,] noiseMap = new float[resolution, resolution];
 
-            float halfSize = noiseData.size / 2.0f;
+            float halfSize = resolution / 2.0f;
 
             int octaves = noiseData.octaveNoiseType.Count;
             float2[] octaveOffsets = new float2[octaves];
@@ -32,9 +32,9 @@ namespace TerrainGenerator
 
             System.Func<float2, float> generateNoise;
 
-            for (int y = 0; y < noiseData.size; y++)
+            for (int y = 0; y < resolution; y++)
             {
-                for (int x = 0; x < noiseData.size; x++)
+                for (int x = 0; x < resolution; x++)
                 {
                     float amplitude = 1;
                     float frequency = 1;
@@ -63,8 +63,8 @@ namespace TerrainGenerator
                 }
             }
 
-            for (int y = 0; y < noiseData.size; y++)
-                for (int x = 0; x < noiseData.size; x++)
+            for (int y = 0; y < resolution; y++)
+                for (int x = 0; x < resolution; x++)
                     noiseMap[x, y] = math.unlerp(minNoiseValue, maxNoiseValue, noiseMap[x, y]);
             
             return noiseMap;

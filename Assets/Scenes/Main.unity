@@ -134,11 +134,11 @@ GameObject:
   - component: {fileID: 11411151}
   - component: {fileID: 11411154}
   m_Layer: 0
-  m_Name: NoiseDebug
+  m_Name: HeightmapDebug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!23 &11411151
 MeshRenderer:
@@ -215,8 +215,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noiseRenderer: {fileID: 11411151}
   textureName: _BaseMap
+  resolution: 101
   noiseData:
-    size: 100
     scale: 30
     offset:
       x: 0
@@ -225,6 +225,11 @@ MonoBehaviour:
     octaveNoiseType: 00000000
     amplitudeModifier: 0.5
     frequencyModifier: 2
+  falloffData:
+    type: 1
+    sharpness: 4.5
+    scale: 1.1
+  debugType: 2
 --- !u!1 &653260035
 GameObject:
   m_ObjectHideFlags: 0
