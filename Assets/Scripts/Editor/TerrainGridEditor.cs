@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace TerrainGenerator
 {
-    [CustomEditor(typeof(TerrainHandler))]
-    public class TerrainEditor : Editor
+    [CustomEditor(typeof(TerrainGridHandler))]
+    public class TerrainGridEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
 
-            TerrainHandler terrainHandler = (TerrainHandler)target;
+            TerrainGridHandler terrainHandler = (TerrainGridHandler)target;
 
             GUILayout.Space(20);
 
@@ -41,7 +41,7 @@ namespace TerrainGenerator
             if (GUILayout.Button("Reset Grid"))
             {
                 terrainHandler.ResetTiles(0);
-                terrainHandler.terrainData.gridSideCount = 1;
+                terrainHandler.terrainGridData.gridSideCount = 1;
             }
         }
     }

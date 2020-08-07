@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace TerrainGenerator
 {
     [System.Serializable]
-    public class TerrainData
+    public class TerrainGridData
     {
         public List<Terrain> terrain;
 
