@@ -1,4 +1,5 @@
 ﻿using Unity.Mathematics;
+using UnityEditor.ShaderGraph.Internal;
 
 namespace TerrainGenerator 
 { 
@@ -28,6 +29,12 @@ namespace TerrainGenerator
             float[,] falloff = new float[resolution, resolution];
 
             float size = (float)resolution - 1;
+            float xOffset = 0, yOffset = 0;
+
+            float factor = 1 / (size / (resolution - 1)) * 0.5f;
+
+            float xOffsetFactor = 2.0f * xOffset / (resolution - 1) * factor;
+            float yOffsetFactor = 2.0f * yOffset / (resolution - 1) * factor;
 
             for (int y = 0; y < resolution; y++)
             {
@@ -35,8 +42,8 @@ namespace TerrainGenerator
                 {
                     float2 sample;
 
-                    sample.x = x / size * 2 - 1f;
-                    sample.y = y / size * 2 - 1f;
+                    sample.x = x / size - factor + xOffsetFactor;
+                    sample.y = y / size - factor - yOffsetFactor;
 
                     float value = 1 - math.max(math.abs(sample.x), math.abs(sample.y));
 
@@ -52,8 +59,12 @@ namespace TerrainGenerator
             float[,] falloff = new float[resolution, resolution];
 
             float size = (float)resolution - 1;
+            float xOffset = 0, yOffset = 0;
 
-            float2 center = new float2(size / 2f, size / 2f);
+            float factor = 1 / (size / (resolution - 1));
+            float coord = factor * size / 2;
+
+            float2 center = new float2(coord - xOffset, coord + yOffset);
 
             for (int y = 0; y < resolution; y++)
             {

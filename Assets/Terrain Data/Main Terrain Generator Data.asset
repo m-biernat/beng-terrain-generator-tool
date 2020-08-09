@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Main Terrain Generator Data
   m_EditorClassIdentifier: 
   noiseData:
-    scale: 2
+    scale: 300
     offset:
       x: 0
       y: 0
     seed: 4294967295
-    octaveNoiseType: 
+    octaveNoiseType: 020000000100000001000000
     amplitudeModifier: 0.5
-    frequencyModifier: 2
+    frequencyModifier: 3
   falloffData:
-    type: 0
-    sharpness: 3
-    scale: 2.2
+    type: 1
+    sharpness: 4.5
+    scale: 2
