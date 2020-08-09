@@ -315,6 +315,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 214643418}
+  - component: {fileID: 214643420}
   - component: {fileID: 214643419}
   m_Layer: 0
   m_Name: TerrainHandler
@@ -354,6 +355,21 @@ MonoBehaviour:
     terrain:
     - {fileID: 147526083}
     gridSideCount: 1
+--- !u!114 &214643420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214643417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c918aabebd317474190e843cbddbdd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainGridHandler: {fileID: 214643419}
+  terrainGeneratorData: {fileID: 11400000, guid: af93bf53503705f4db097bb81fe27d76,
+    type: 2}
 --- !u!1 &251007370
 GameObject:
   m_ObjectHideFlags: 0
