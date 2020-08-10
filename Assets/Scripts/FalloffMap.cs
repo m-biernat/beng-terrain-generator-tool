@@ -1,11 +1,10 @@
 ﻿using Unity.Mathematics;
-using UnityEditor.ShaderGraph.Internal;
 
 namespace TerrainGenerator 
 { 
     public static class FalloffMap
     {
-        public static float[,] Generate(int resolution, FalloffData falloffData)
+        public static float[,] Generate(int resolution, float size, FalloffData falloffData)
         {
             if (!falloffData.Validate())
             {
@@ -16,25 +15,22 @@ namespace TerrainGenerator
             switch (falloffData.type)
             {
                 case FalloffType.Rectangular:
-                    return GenerateRectangular(resolution, falloffData);
+                    return GenerateRectangular(resolution, size, falloffData);
                 case FalloffType.Radial:
-                    return GenerateRadial(resolution, falloffData);
+                    return GenerateRadial(resolution, size, falloffData);
                 default:
                     return null;
             }
         }
 
-        private static float[,] GenerateRectangular(int resolution, FalloffData falloffData)
+        private static float[,] GenerateRectangular(int resolution, float size, FalloffData falloffData)
         {
             float[,] falloff = new float[resolution, resolution];
 
-            float size = (float)resolution - 1;
-            float xOffset = 0, yOffset = 0;
-
             float factor = 1 / (size / (resolution - 1)) * 0.5f;
 
-            float xOffsetFactor = 2.0f * xOffset / (resolution - 1) * factor;
-            float yOffsetFactor = 2.0f * yOffset / (resolution - 1) * factor;
+            float xOffsetFactor = 2.0f * falloffData.offset.x / (resolution - 1) * factor;
+            float yOffsetFactor = 2.0f * falloffData.offset.y / (resolution - 1) * factor;
 
             for (int y = 0; y < resolution; y++)
             {
@@ -43,7 +39,7 @@ namespace TerrainGenerator
                     float2 sample;
 
                     sample.x = x / size - factor + xOffsetFactor;
-                    sample.y = y / size - factor - yOffsetFactor;
+                    sample.y = y / size - factor + yOffsetFactor;
 
                     float value = 1 - math.max(math.abs(sample.x), math.abs(sample.y));
 
@@ -54,17 +50,14 @@ namespace TerrainGenerator
             return falloff;
         }
 
-        private static float[,] GenerateRadial(int resolution, FalloffData falloffData)
+        private static float[,] GenerateRadial(int resolution, float size, FalloffData falloffData)
         {
             float[,] falloff = new float[resolution, resolution];
-
-            float size = (float)resolution - 1;
-            float xOffset = 0, yOffset = 0;
 
             float factor = 1 / (size / (resolution - 1));
             float coord = factor * size / 2;
 
-            float2 center = new float2(coord - xOffset, coord + yOffset);
+            float2 center = new float2(coord - falloffData.offset.x, coord - falloffData.offset.y);
 
             for (int y = 0; y < resolution; y++)
             {

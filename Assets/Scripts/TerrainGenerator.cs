@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace TerrainGenerator 
 {
@@ -29,7 +28,7 @@ namespace TerrainGenerator
         private static float[,] Combined(int resolution, NoiseData noiseData, FalloffData falloffData)
         {
             float[,] noiseMap = NoiseMap.Generate(resolution, noiseData);
-            float[,] falloffMap = FalloffMap.Generate(resolution, falloffData);
+            float[,] falloffMap = FalloffMap.Generate(resolution, (float)resolution - 1, falloffData);
 
             for (int y = 0; y < resolution; y++)
                 for (int x = 0; x < resolution; x++)

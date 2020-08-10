@@ -8,7 +8,11 @@ namespace TerrainGenerator.Hidden
         public string textureName = "_BaseMap";
 
         [Space]
-        public int resolution = 32;
+        public int resolution = 33;
+
+        [Space]
+        public FalloffSizeSource falloffSizeSource;
+        public float falloffSize = 32.0f;
 
         [Space]
         public NoiseData noiseData;
@@ -26,6 +30,11 @@ namespace TerrainGenerator.Hidden
                 Debug.LogError("Resolution must be greater than 3");
                 return;
             }
+            
+            if (falloffSizeSource == FalloffSizeSource.Resolution)
+            {
+                falloffSize = (float)resolution - 1;
+            }
 
             float[,] generatedMap;
 
@@ -36,7 +45,7 @@ namespace TerrainGenerator.Hidden
                     break;
                 
                 case DebugType.Falloff:
-                    generatedMap = FalloffMap.Generate(resolution, falloffData);
+                    generatedMap = FalloffMap.Generate(resolution, falloffSize, falloffData);
                     break;
 
                 case DebugType.Combined:
@@ -75,7 +84,7 @@ namespace TerrainGenerator.Hidden
         private float[,] Combined()
         {
             float[,] noiseMap = NoiseMap.Generate(resolution, noiseData);
-            float[,] falloffMap = FalloffMap.Generate(resolution, falloffData);
+            float[,] falloffMap = FalloffMap.Generate(resolution, falloffSize, falloffData);
 
             for (int y = 0; y < resolution; y++)
                 for (int x = 0; x < resolution; x++)
@@ -90,5 +99,11 @@ namespace TerrainGenerator.Hidden
         Noise,
         Falloff,
         Combined
+    };
+
+    public enum FalloffSizeSource
+    {
+        Resolution,
+        PropertyField
     };
 }

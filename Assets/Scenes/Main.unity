@@ -216,6 +216,8 @@ MonoBehaviour:
   noiseRenderer: {fileID: 11411151}
   textureName: _BaseMap
   resolution: 101
+  falloffSizeSource: 0
+  falloffSize: 100
   noiseData:
     scale: 30
     offset:
@@ -227,6 +229,9 @@ MonoBehaviour:
     frequencyModifier: 2
   falloffData:
     type: 1
+    offset:
+      x: 0
+      y: 0
     sharpness: 4.6
     scale: 1.2
   debugType: 1

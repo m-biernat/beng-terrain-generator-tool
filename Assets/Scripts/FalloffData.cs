@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
 
 namespace TerrainGenerator
 {
@@ -6,6 +6,8 @@ namespace TerrainGenerator
     public class FalloffData
     {
         public FalloffType type;
+
+        public float2 offset;
 
         public float sharpness = 3;
         public float scale = 2.2f;
