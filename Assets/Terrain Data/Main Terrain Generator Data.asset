@@ -22,6 +22,9 @@ MonoBehaviour:
     amplitudeModifier: 0.5
     frequencyModifier: 3
   falloffData:
-    type: 1
+    type: 0
+    offset:
+      x: 0
+      y: 0
     sharpness: 4.5
     scale: 2

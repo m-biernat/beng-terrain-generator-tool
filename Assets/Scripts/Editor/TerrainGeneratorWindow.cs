@@ -59,7 +59,7 @@ namespace TerrainGenerator
 
             if (GUILayout.Button("Generate", GUILayout.Height(35.0f), GUILayout.Width(100.0f)))
             {
-                TerrainGenerator.Generate();
+                TerrainGenerator.GenerateHeightMap();
             }
 
             GUILayout.EndHorizontal();
