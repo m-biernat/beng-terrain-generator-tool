@@ -63,6 +63,22 @@ namespace TerrainGenerator
                 }
             }
 
+            if (noiseData.extremaType == ExtremaType.Global)
+            {
+                float amplitude = 1;
+                maxNoiseValue = 0;
+
+                for (int i = 0; i < octaves; i++)
+                {
+                    maxNoiseValue += noiseData.extremumNoiseValue * amplitude;
+                    amplitude *= noiseData.amplitudeModifier;
+                }
+
+                minNoiseValue = -maxNoiseValue;
+            }
+
+            //UnityEngine.Debug.Log($"{noiseData.extremaType} min: {minNoiseValue}; max: {maxNoiseValue}");
+
             for (int y = 0; y < resolution; y++)
                 for (int x = 0; x < resolution; x++)
                     noiseMap[x, y] = math.unlerp(minNoiseValue, maxNoiseValue, noiseMap[x, y]);

@@ -18,6 +18,11 @@ namespace TerrainGenerator
         public float amplitudeModifier = 0.5f;
         public float frequencyModifier = 2.0f;
 
+        [Space]
+        public ExtremaType extremaType;
+        [Range(0.5f, 1.0f)]
+        public float extremumNoiseValue = 0.8f;
+
         public bool Validate()
         {
             if (scale <= 0.0f)
@@ -36,5 +41,11 @@ namespace TerrainGenerator
         Perlin,
         Simplex,
         Cellular
+    };
+
+    public enum ExtremaType
+    { 
+        Local,
+        Global
     };
 }

@@ -21,6 +21,8 @@ MonoBehaviour:
     octaveNoiseType: 020000000100000001000000
     amplitudeModifier: 0.5
     frequencyModifier: 3
+    extremaType: 1
+    extremumNoiseValue: 0.8
   falloffData:
     type: 0
     offset:
