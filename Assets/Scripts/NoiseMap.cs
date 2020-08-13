@@ -79,9 +79,16 @@ namespace TerrainGenerator
 
             //UnityEngine.Debug.Log($"{noiseData.extremaType} min: {minNoiseValue}; max: {maxNoiseValue}");
 
+            System.Func<float, float> heightModifier = GetHeightModifierFunc(noiseData);
+
             for (int y = 0; y < resolution; y++)
+            {
                 for (int x = 0; x < resolution; x++)
+                {
                     noiseMap[x, y] = math.unlerp(minNoiseValue, maxNoiseValue, noiseMap[x, y]);
+                    noiseMap[x, y] *= heightModifier(noiseMap[x, y]);
+                }
+            }        
             
             return noiseMap;
         }
@@ -96,6 +103,23 @@ namespace TerrainGenerator
                     return noise.snoise;
                 case NoiseType.Cellular:
                     return (float2 P) => noise.cellular(P).x * 2 - 1;
+                default:
+                    return null;
+            }
+        }
+
+        private static System.Func<float, float> GetHeightModifierFunc(NoiseData noiseData)
+        {
+            switch (noiseData.heightModifierType)
+            {
+                case HeightModifierType.None:
+                    return (float val) => { return 1.0f; };
+                case HeightModifierType.Global:
+                    return (float val) => { return noiseData.globalHeightModifier; };
+                case HeightModifierType.Curve:
+                    return (float val) => { return noiseData.curveHeightModifier.Evaluate(val); };
+                case HeightModifierType.Both:
+                    return (float val) => { return noiseData.globalHeightModifier * noiseData.curveHeightModifier.Evaluate(val); };
                 default:
                     return null;
             }

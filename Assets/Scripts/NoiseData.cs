@@ -23,6 +23,12 @@ namespace TerrainGenerator
         [Range(0.5f, 1.0f)]
         public float extremumNoiseValue = 0.8f;
 
+        [Space]
+        public HeightModifierType heightModifierType;
+        [Range(0.0f, 1.0f)]
+        public float globalHeightModifier = 1.0f;
+        public AnimationCurve curveHeightModifier;
+
         public bool Validate()
         {
             if (scale <= 0.0f)
@@ -30,6 +36,9 @@ namespace TerrainGenerator
             if (seed < 1)
                 return false;
             if (octaveNoiseType.Count == 0)
+                return false;
+            if ((heightModifierType == HeightModifierType.Curve || heightModifierType == HeightModifierType.Both)
+                && curveHeightModifier.length == 0)
                 return false;
 
             return true;
@@ -47,5 +56,13 @@ namespace TerrainGenerator
     { 
         Local,
         Global
+    };
+
+    public enum HeightModifierType
+    { 
+        None,
+        Global,
+        Curve,
+        Both
     };
 }
