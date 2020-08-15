@@ -4,7 +4,7 @@ namespace TerrainGenerator
 {
     public static class NoiseMap
     {
-        public static float[,] Generate(int resolution, NoiseData noiseData)
+        public static float[,] Generate(int resolution, NoiseData noiseData, float2 tileOffset)
         {
             if (!noiseData.Validate())
             {
@@ -23,8 +23,8 @@ namespace TerrainGenerator
 
             for (int i = 0; i < octaves; i++)
             {
-                octaveOffsets[i].x = rand.NextFloat(-10000, 10000) + noiseData.offset.x;
-                octaveOffsets[i].y = rand.NextFloat(-10000, 10000) + noiseData.offset.y;
+                octaveOffsets[i].x = rand.NextFloat(-10000, 10000) + noiseData.offset.x + tileOffset.x;
+                octaveOffsets[i].y = rand.NextFloat(-10000, 10000) + noiseData.offset.y + tileOffset.y;
             }
 
             float maxNoiseValue = float.MinValue;

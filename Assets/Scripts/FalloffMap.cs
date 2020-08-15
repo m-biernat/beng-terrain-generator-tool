@@ -1,4 +1,6 @@
-﻿namespace TerrainGenerator 
+﻿using Unity.Mathematics;
+
+namespace TerrainGenerator 
 {
     public static class FalloffMap
     {
@@ -25,7 +27,7 @@
         {
             float[,] falloff = new float[resolution, resolution];
 
-            Falloff.RectangularData rectangularData = new Falloff.RectangularData(resolution, size, falloffData);
+            Falloff.RectangularData rectangularData = new Falloff.RectangularData(resolution, size, float2.zero);
 
             for (int y = 0; y < resolution; y++)
                 for (int x = 0; x < resolution; x++)
@@ -38,7 +40,7 @@
         {
             float[,] falloff = new float[resolution, resolution];
 
-            Falloff.RadialData radialData = new Falloff.RadialData(resolution, size, falloffData);
+            Falloff.RadialData radialData = new Falloff.RadialData(resolution, size, float2.zero);
 
             for (int y = 0; y < resolution; y++)
                 for (int x = 0; x < resolution; x++)

@@ -41,7 +41,7 @@ namespace TerrainGenerator.Hidden
             switch (debugType)
             {
                 case DebugType.Noise:
-                    generatedMap = NoiseMap.Generate(resolution, noiseData);
+                    generatedMap = NoiseMap.Generate(resolution, noiseData, Unity.Mathematics.float2.zero);
                     break;
                 
                 case DebugType.Falloff:
@@ -83,7 +83,7 @@ namespace TerrainGenerator.Hidden
 
         private float[,] Combined()
         {
-            float[,] noiseMap = NoiseMap.Generate(resolution, noiseData);
+            float[,] noiseMap = NoiseMap.Generate(resolution, noiseData, Unity.Mathematics.float2.zero);
             float[,] falloffMap = FalloffMap.Generate(resolution, falloffSize, falloffData);
 
             for (int y = 0; y < resolution; y++)

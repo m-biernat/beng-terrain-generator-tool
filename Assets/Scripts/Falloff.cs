@@ -8,12 +8,12 @@ namespace TerrainGenerator
         {
             public float factor, xOffsetFactor, yOffsetFactor;
 
-            public RectangularData(int resolution, float size, FalloffData falloffData)
+            public RectangularData(int resolution, float size, float2 tileOffset)
             {
                 factor = 1 / (size / (resolution - 1)) * 0.5f;
 
-                xOffsetFactor = 2.0f * falloffData.offset.x / (resolution - 1) * factor;
-                yOffsetFactor = 2.0f * falloffData.offset.y / (resolution - 1) * factor;
+                xOffsetFactor = 2.0f * tileOffset.x / (resolution - 1) * factor;
+                yOffsetFactor = 2.0f * tileOffset.y / (resolution - 1) * factor;
             }
         };
 
@@ -35,12 +35,12 @@ namespace TerrainGenerator
 
             public float2 center;
 
-            public RadialData(int resolution, float size, FalloffData falloffData)
+            public RadialData(int resolution, float size, float2 tileOffset)
             {
                 factor = 1 / (size / (resolution - 1));
                 coord = factor * size / 2;
 
-                center = new float2(coord - falloffData.offset.x, coord - falloffData.offset.y);
+                center = new float2(coord - tileOffset.x, coord - tileOffset.y);
             }
         };
 
