@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Unity.Mathematics;
-using UnityEngine.Tilemaps;
 
 namespace TerrainGenerator 
 {
@@ -20,9 +20,6 @@ namespace TerrainGenerator
             float[,] generatedMap;
 
             int resolution = terrainGridHandler.terrainGridData.terrain[0].terrainData.heightmapResolution;
-
-            //generatedMap = NoiseMap.Generate(resolution, terrainGeneratorData.noiseData);
-            //generatedMap = Combined(resolution, terrainGeneratorData.noiseData, terrainGeneratorData.falloffData);
 
             int i = 0;
             int count = terrainGridHandler.terrainGridData.gridSideCount;
@@ -44,15 +41,18 @@ namespace TerrainGenerator
             else
                 tileOffset = new float2(tileOffsetValue, -tileOffsetValue);
 
+            Func<float[,]> getHeightMap = 
+                GetHeightMapFunc(resolution, size, terrainGeneratorData.noiseData, terrainGeneratorData.falloffData);
+
             for (int y = 0; y < count; y++)
             {
                 for (int x = 0; x < count; x++)
                 {
                     terrainGeneratorData.noiseData.offset = noiseOffset + tileOffset;
                     terrainGeneratorData.falloffData.offset = falloffOffset + tileOffset;
-                    
-                    generatedMap = Combined(resolution, size, terrainGeneratorData.noiseData, terrainGeneratorData.falloffData);
-                    
+
+                    generatedMap = getHeightMap();
+
                     terrainGridHandler.terrainGridData.terrain[i].terrainData.SetHeights(0, 0, generatedMap);
 
                     tileOffset.y += falloffDiff;
@@ -64,20 +64,42 @@ namespace TerrainGenerator
 
             terrainGeneratorData.noiseData.offset = noiseOffset;
             terrainGeneratorData.falloffData.offset = falloffOffset;
-
-            //terrainGridHandler.terrainGridData.terrain[0].terrainData.SetHeights(0, 0, generatedMap);
         }
 
-        private static float[,] Combined(int resolution, float size, NoiseData noiseData, FalloffData falloffData)
+        private static Func<float[,]> GetHeightMapFunc(int resolution, float size, NoiseData noiseData, FalloffData falloffData)
         {
-            float[,] noiseMap = NoiseMap.Generate(resolution, noiseData);
-            float[,] falloffMap = FalloffMap.Generate(resolution, size, falloffData);
+            if (terrainGeneratorData.useFalloff)
+            {
+                return () =>
+                {
+                    float[,] noiseMap = NoiseMap.Generate(resolution, noiseData);
 
-            for (int y = 0; y < resolution; y++)
-                for (int x = 0; x < resolution; x++)
-                    noiseMap[x, y] *= falloffMap[x, y];
+                    Func<int, int, float> getFalloff;
 
-            return noiseMap;
+                    if (falloffData.type == FalloffType.Rectangular)
+                    {
+                        Falloff.RectangularData rectangularData =
+                        new Falloff.RectangularData(resolution, size, falloffData);
+
+                        getFalloff = (x, y) => Falloff.GetRectangular(x, y, size, falloffData, rectangularData);
+                    }
+                    else
+                    {
+                        Falloff.RadialData radialData =
+                        new Falloff.RadialData(resolution, size, falloffData);
+
+                        getFalloff = (x, y) => Falloff.GetRadial(x, y, size, falloffData, radialData);
+                    }
+
+                    for (int y = 0; y < resolution; y++)
+                        for (int x = 0; x < resolution; x++)
+                            noiseMap[x, y] *= getFalloff(x, y);
+
+                    return noiseMap;
+                };
+            }
+            else
+                return () => NoiseMap.Generate(resolution, noiseData);
         }
     }
 }
