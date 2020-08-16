@@ -69,5 +69,13 @@ namespace TerrainGenerator
                 }
             }
         }
+
+        [MenuItem("GameObject/Terrain Handler", false, 11)]
+        private static void Init()
+        {
+            GameObject go = new GameObject("Terrain Handler");
+            go.AddComponent<TerrainHandler>();
+            go.isStatic = true;
+        }
     }
 }
