@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Threading;
-using UnityEngine;
 using Unity.Mathematics;
 
 namespace TerrainGenerator 
 {
-    public class TerrainGenerator : MonoBehaviour
+    public static class TerrainGenerator
     {
-        private static TerrainGridHandler terrainGridHandler;
+        private static TerrainHandler terrainHandler;
         private static TerrainGeneratorData terrainGeneratorData;
 
-        public static void Init(TerrainGridHandler terrainGridHandler, TerrainGeneratorData terrainGeneratorData)
+        public static void Init(TerrainHandler terrainHandler)
         {
-            TerrainGenerator.terrainGridHandler = terrainGridHandler;
-            TerrainGenerator.terrainGeneratorData = terrainGeneratorData;
+            TerrainGenerator.terrainHandler = terrainHandler;
+            terrainGeneratorData = terrainHandler.terrainGeneratorData;
         }
 
         public static void GenerateHeightMap()
         {
-            int resolution = terrainGridHandler.terrainGridData.terrain[0].terrainData.heightmapResolution;
+            int resolution = terrainHandler.terrainGridData.terrain[0].terrainData.heightmapResolution;
 
             int i = 0;
-            int count = terrainGridHandler.terrainGridData.gridSideCount;
+            int count = terrainHandler.terrainGridData.gridSideCount;
 
             float size = ((float)resolution - 1) * count;
 
@@ -55,7 +54,7 @@ namespace TerrainGenerator
 
                         syncContext.Post(_ =>
                         {
-                            terrainGridHandler.terrainGridData.terrain[(int)args[1]].terrainData.SetHeights(0, 0, generatedMap);
+                            terrainHandler.terrainGridData.terrain[(int)args[1]].terrainData.SetHeights(0, 0, generatedMap);
                         }, 
                         null);
                     }, 

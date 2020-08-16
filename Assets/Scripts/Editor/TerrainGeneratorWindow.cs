@@ -23,10 +23,10 @@ namespace TerrainGenerator
         }
         */
 
-        public static void OpenWindow(TerrainGridHandler terrainGridHandler, TerrainGeneratorData terrainGeneratorData)
+        public static void OpenWindow(TerrainHandler terrainGeneratorHandler)
         {
             GetWindow<TerrainGeneratorWindow>("Terrain Generator");
-            TerrainGenerator.Init(terrainGridHandler, terrainGeneratorData);
+            TerrainGenerator.Init(terrainGeneratorHandler);
         }
 
         private void OnGUI()

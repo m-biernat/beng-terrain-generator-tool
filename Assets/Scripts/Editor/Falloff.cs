@@ -2,7 +2,7 @@
 
 namespace TerrainGenerator
 {
-    public class Falloff
+    public static class Falloff
     {
         public struct RectangularData
         {

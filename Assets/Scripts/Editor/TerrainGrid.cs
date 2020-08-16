@@ -1,14 +1,12 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace TerrainGenerator
 {
-    public class TerrainGridHandler : MonoBehaviour
+    public class TerrainGrid : MonoBehaviour
     {
-        public TerrainGridData terrainGridData;
-
-        public void CreateRootObject()
+        public static void CreateRootObject(Transform transform, TerrainGridData terrainGridData)
         {
             if (terrainGridData.terrain.Count > 0 && terrainGridData.terrain[0])
                 return;
@@ -33,12 +31,12 @@ namespace TerrainGenerator
 
             terrainGridData.terrain.Add(go.GetComponent<Terrain>());
 
-            RepositionTiles();
+            RepositionTiles(terrainGridData);
         }
 
-        public void UpdateGrid()
+        public static void UpdateGrid(Transform transform, TerrainGridData terrainGridData)
         {
-            ResetTiles(1);
+            ResetTiles(1, terrainGridData);
 
             string currentSceneName = SceneManager.GetActiveScene().name;
 
@@ -65,10 +63,10 @@ namespace TerrainGenerator
                 }
             }
 
-            RepositionTiles();
+            RepositionTiles(terrainGridData);
         }
 
-        public void ResetTiles(int startIndex)
+        public static void ResetTiles(int startIndex, TerrainGridData terrainGridData)
         {
             string currentSceneName = SceneManager.GetActiveScene().name;
 
@@ -88,7 +86,7 @@ namespace TerrainGenerator
             }
         }
 
-        public void RepositionTiles()
+        public static void RepositionTiles(TerrainGridData terrainGridData)
         {
             Vector3 rootPosition = terrainGridData.terrain[0].transform.localPosition;
             float tileSize = terrainGridData.terrain[0].terrainData.size.x;

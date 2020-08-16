@@ -1,19 +1,15 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace TerrainGenerator
 {
-    [RequireComponent(typeof(TerrainGridHandler))]
-    public class TerrainGeneratorHandler : MonoBehaviour
+    public class TerrainHandler : MonoBehaviour
     {
-        public TerrainGridHandler terrainGridHandler;
+        #if UNITY_EDITOR
         public TerrainGeneratorData terrainGeneratorData;
 
-        public void AttachTerrainGridHandler()
-        {
-            terrainGridHandler = GetComponent<TerrainGridHandler>();
-        }
+        public TerrainGridData terrainGridData;
 
         public void CreateNewTerrainGeneratorDataAsset()
         {
@@ -29,5 +25,6 @@ namespace TerrainGenerator
 
             AssetDatabase.CreateAsset(terrainGeneratorData, $"Assets/Terrain Data/{currentSceneName} Terrain Generator Data.asset");
         }
+        #endif
     }
 }
