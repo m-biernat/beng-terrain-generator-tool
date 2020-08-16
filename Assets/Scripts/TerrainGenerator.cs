@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using UnityEngine;
 using Unity.Mathematics;
 
@@ -17,8 +18,6 @@ namespace TerrainGenerator
 
         public static void GenerateHeightMap()
         {
-            float[,] generatedMap;
-
             int resolution = terrainGridHandler.terrainGridData.terrain[0].terrainData.heightmapResolution;
 
             int i = 0;
@@ -42,13 +41,33 @@ namespace TerrainGenerator
             Func<float2, float[,]> getHeightMap = 
                 GetHeightMapFunc(resolution, size, terrainGeneratorData.noiseData, terrainGeneratorData.falloffData);
 
+            var syncContext = SynchronizationContext.Current;
+
             for (int y = 0; y < count; y++)
             {
                 for (int x = 0; x < count; x++)
                 {
+                    ThreadPool.QueueUserWorkItem((input) => 
+                    {
+                        object[] args = input as object[];
+
+                        float[,] generatedMap = getHeightMap((float2)args[0]);
+
+                        syncContext.Post(_ =>
+                        {
+                            terrainGridHandler.terrainGridData.terrain[(int)args[1]].terrainData.SetHeights(0, 0, generatedMap);
+                        }, 
+                        null);
+                    }, 
+                    new object[] { tileOffset, i });
+
+                    Thread.Sleep(2);
+
+                    /*
                     generatedMap = getHeightMap(tileOffset);
 
                     terrainGridHandler.terrainGridData.terrain[i].terrainData.SetHeights(0, 0, generatedMap);
+                    */
 
                     tileOffset.y += falloffDiff;
                     i++;
