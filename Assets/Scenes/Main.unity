@@ -213,37 +213,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f456dcab54eb442bd2b7c9afa3ad60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noiseRenderer: {fileID: 11411151}
-  textureName: _BaseMap
-  resolution: 101
-  falloffSizeSource: 0
-  falloffSize: 100
-  noiseData:
-    scale: 30
-    offset:
-      x: 0
-      y: 0
-    seed: 4294967295
-    octaveNoiseType: 00000000
-    amplitudeModifier: 0.5
-    frequencyModifier: 2
-    extremaType: 0
-    extremumNoiseValue: 0.8
-    heightModifierType: 0
-    globalHeightModifier: 1
-    curveHeightModifier:
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  falloffData:
-    type: 1
-    offset:
-      x: 0
-      y: 0
-    sharpness: 4.6
-    scale: 1.2
-  debugType: 1
 --- !u!1 &147526080
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,18 +333,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 214643417}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c918aabebd317474190e843cbddbdd5d, type: 3}
+  m_Script: {fileID: 11500000, guid: b146c038be67a1f418e691e31bcfcd34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainGeneratorData: {fileID: 11400000, guid: af93bf53503705f4db097bb81fe27d76,
-    type: 2}
-  terrainGridData:
-    terrain:
-    - {fileID: 147526083}
-    - {fileID: 1786264139}
-    - {fileID: 1248365339}
-    - {fileID: 731974604}
-    gridSideCount: 2
+  terrain:
+  - {fileID: 147526083}
+  - {fileID: 1786264139}
+  - {fileID: 1248365339}
+  - {fileID: 731974604}
+  gridSideCount: 2
 --- !u!1 &251007370
 GameObject:
   m_ObjectHideFlags: 0

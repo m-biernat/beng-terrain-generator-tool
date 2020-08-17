@@ -49,7 +49,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  useFalloff: 1
   falloffData:
     type: 0
     offset:
@@ -57,3 +56,4 @@ MonoBehaviour:
       y: 0
     sharpness: 4.5
     scale: 2
+    useFalloff: 1

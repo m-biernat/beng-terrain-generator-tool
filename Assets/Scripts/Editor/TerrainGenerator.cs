@@ -6,21 +6,12 @@ namespace TerrainGenerator
 {
     public static class TerrainGenerator
     {
-        private static TerrainHandler terrainHandler;
-        private static TerrainGeneratorData terrainGeneratorData;
-
-        public static void Init(TerrainHandler terrainHandler)
+        public static void GenerateHeightMap(TerrainGridData terrainGridData, TerrainGeneratorData terrainGeneratorData)
         {
-            TerrainGenerator.terrainHandler = terrainHandler;
-            terrainGeneratorData = terrainHandler.terrainGeneratorData;
-        }
-
-        public static void GenerateHeightMap()
-        {
-            int resolution = terrainHandler.terrainGridData.terrain[0].terrainData.heightmapResolution;
+            int resolution = terrainGridData.terrain[0].terrainData.heightmapResolution;
 
             int i = 0;
-            int count = terrainHandler.terrainGridData.gridSideCount;
+            int count = terrainGridData.gridSideCount;
 
             float size = ((float)resolution - 1) * count;
 
@@ -54,7 +45,7 @@ namespace TerrainGenerator
 
                         syncContext.Post(_ =>
                         {
-                            terrainHandler.terrainGridData.terrain[(int)args[1]].terrainData.SetHeights(0, 0, generatedMap);
+                            terrainGridData.terrain[(int)args[1]].terrainData.SetHeights(0, 0, generatedMap);
                         }, 
                         null);
                     }, 
@@ -65,7 +56,7 @@ namespace TerrainGenerator
                     /*
                     generatedMap = getHeightMap(tileOffset);
 
-                    terrainGridHandler.terrainGridData.terrain[i].terrainData.SetHeights(0, 0, generatedMap);
+                    terrainGridData.terrain[i].terrainData.SetHeights(0, 0, generatedMap);
                     */
 
                     tileOffset.y += falloffDiff;
@@ -78,7 +69,7 @@ namespace TerrainGenerator
 
         private static Func<float2, float[,]> GetHeightMapFunc(int resolution, float size, NoiseData noiseData, FalloffData falloffData)
         {
-            if (terrainGeneratorData.useFalloff)
+            if (falloffData.useFalloff)
             {
                 return (tileOffset) =>
                 {

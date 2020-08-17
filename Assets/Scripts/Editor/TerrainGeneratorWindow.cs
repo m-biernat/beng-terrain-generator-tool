@@ -7,31 +7,31 @@ namespace TerrainGenerator
     {
         private Toolbar toolbar = Toolbar.General;
 
-        private readonly string[] toolbarOptions =
-        {
-        "General", "Heightmap", "Erosion", "Texturing", "Detail"
-        };
+        private readonly string[] toolbarOptions = { "General", "Settings" };
 
-        private bool autoGenerate = false;
-        private Generate generate = Generate.Heightmap;
+        private TerrainGeneratorData terrainGeneratorData;
+        private static TerrainGridData terrainGridData;
 
-        /*
-        [MenuItem("Window/Terrain Generator")]
-        public static void ShowWindow()
-        {
-            GetWindow<TerrainGeneratorWindow>("Terrain Generator");
-        }
-        */
+        private bool utilityFoldout = false;
+        private int seed;
 
-        public static void OpenWindow(TerrainHandler terrainGeneratorHandler)
+        private Vector2 scrollPos;
+
+        public static void OpenWindow(TerrainGridData terrainGridData)
         {
             GetWindow<TerrainGeneratorWindow>("Terrain Generator");
-            TerrainGenerator.Init(terrainGeneratorHandler);
+            TerrainGeneratorWindow.terrainGridData = terrainGridData;
         }
 
         private void OnGUI()
         {
             toolbar = (Toolbar)GUILayout.Toolbar((int)toolbar, toolbarOptions, GUILayout.MinHeight(25.0f));
+            
+            GUILayout.Space(5);
+
+            terrainGeneratorData = EditorGUILayout.ObjectField("", terrainGeneratorData, typeof(TerrainGeneratorData), false) as TerrainGeneratorData;
+
+            GUILayout.Space(5);
 
             switch (toolbar)
             {
@@ -39,53 +39,127 @@ namespace TerrainGenerator
                     General();
                     break;
 
-                case Toolbar.Heightmap:
-                    Heightmap();
+                case Toolbar.Settings:
+                    Settings();
                     break;
             }
-
-            GUILayout.FlexibleSpace();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("[STATUS TEXT PH]", GUILayout.Height(35.0f));
-            GUILayout.FlexibleSpace();
-
-            GUILayout.BeginVertical();
-            autoGenerate = GUILayout.Toggle(autoGenerate, "Auto generate");
-            generate = (Generate)EditorGUILayout.EnumPopup(generate, GUILayout.Width(100.0f));
-            GUILayout.EndVertical();
-
-            GUILayout.Space(2.5f);
-
-            if (GUILayout.Button("Generate", GUILayout.Height(35.0f), GUILayout.Width(100.0f)))
-            {
-                TerrainGenerator.GenerateHeightMap();
-            }
-
-            GUILayout.EndHorizontal();
-        }
-
-        private void General()
-        {
-            GUILayout.Label("General");
-        }
-
-        private void Heightmap()
-        {
-            GUILayout.Label("Heightmap");
         }
 
         private enum Toolbar
         {
             General,
-            Heightmap
+            Settings
         }
 
-        private enum Generate
+        private void General()
         {
-            TerrainOnly,
-            Heightmap,
-            Combined
+            if (GUILayout.Button("Create New Terrain Generator Data Asset"))
+            {
+                CreateNewTerrainGeneratorDataAsset();
+            }
+
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            terrainGridData = EditorGUILayout.ObjectField("", terrainGridData, typeof(TerrainGridData), true) as TerrainGridData;
+
+            GUILayout.FlexibleSpace();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            if (terrainGeneratorData != null && terrainGridData != null)
+            {
+                if (GUILayout.Button("Generate\nHeightMap", GUILayout.Height(50), GUILayout.Width(150)))
+                {
+                    TerrainGenerator.GenerateHeightMap(terrainGridData, terrainGeneratorData);
+                }
+
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+
+                GUILayout.Space(10);
+
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+
+                if (GUILayout.Button("Generate\nSplatMap", GUILayout.Height(50), GUILayout.Width(150)))
+                {
+
+                }
+            }
+            else
+            {
+                if (terrainGeneratorData is null)
+                    GUILayout.Label("No Terrain Generator Data asset attached!");
+                else
+                    GUILayout.Label("No Terrain Grid Data object attached!");
+            }    
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
+            GUILayout.FlexibleSpace();
+        }
+
+        private void Settings()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(3);
+            GUILayout.BeginVertical();
+
+            utilityFoldout = EditorGUILayout.Foldout(utilityFoldout, "Utility");
+
+            if (utilityFoldout)
+            {
+                EditorGUILayout.IntField(seed);
+                
+                if (GUILayout.Button("Generate Random Seed"))
+                {
+                    seed = Random.Range(0, int.MaxValue);
+                }
+            }
+
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+
+            if (terrainGeneratorData is null)
+            {
+                GUILayout.FlexibleSpace();
+
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+
+                GUILayout.Label("No Terrain Generator Data asset attached!");
+
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+
+                GUILayout.FlexibleSpace();
+                return;
+            }
+
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+
+            Editor.CreateEditor(terrainGeneratorData).DrawDefaultInspector();
+
+            EditorGUILayout.EndScrollView();
+        }
+
+        private void CreateNewTerrainGeneratorDataAsset()
+        {
+            if (!AssetDatabase.IsValidFolder("Assets/Terrain Data"))
+                AssetDatabase.CreateFolder("Assets", "Terrain Data");
+
+            string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
+            if (!AssetDatabase.IsValidFolder($"Assets/Terrain Data/{currentSceneName}"))
+                AssetDatabase.CreateFolder("Assets/Terrain Data", currentSceneName);
+
+            terrainGeneratorData = (TerrainGeneratorData)ScriptableObject.CreateInstance(typeof(TerrainGeneratorData));
+
+            AssetDatabase.CreateAsset(terrainGeneratorData, $"Assets/Terrain Data/{currentSceneName} Terrain Generator Data.asset");
         }
     }
 }

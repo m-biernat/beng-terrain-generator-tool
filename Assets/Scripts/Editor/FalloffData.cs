@@ -1,4 +1,5 @@
-﻿using Unity.Mathematics;
+﻿using UnityEngine;
+using Unity.Mathematics;
 
 namespace TerrainGenerator
 {
@@ -11,6 +12,9 @@ namespace TerrainGenerator
 
         public float sharpness = 3;
         public float scale = 2.2f;
+
+        [Space]
+        public bool useFalloff = true;
 
         public bool Validate()
         {

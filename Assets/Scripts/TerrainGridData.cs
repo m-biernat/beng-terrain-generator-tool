@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace TerrainGenerator
 {
-    [System.Serializable]
-    public class TerrainGridData
+    public class TerrainGridData : MonoBehaviour
     {
         public List<Terrain> terrain;
 
