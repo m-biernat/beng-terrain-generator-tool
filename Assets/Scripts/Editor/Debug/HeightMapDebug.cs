@@ -4,21 +4,19 @@ namespace TerrainGenerator.Debug
 {
     public class HeightMapDebug : MonoBehaviour
     {
-        [Space]
-        public FalloffSizeSource falloffSizeSource;
-        public float falloffSize = 32.0f;
+        public static DebugType debugType = DebugType.Noise;
+
+        public static FalloffSizeSource falloffSizeSource = FalloffSizeSource.Resolution;
+        public static float falloffSize = 32.0f;
 
         public static Texture2D texture;
 
-        public static void DrawHeightMap(int resolution, DebugType debugType, TerrainGeneratorData terrainGeneratorData)
+        public static void DrawHeightMap(int resolution, TerrainGeneratorData terrainGeneratorData)
         {
-            /*
             if (falloffSizeSource == FalloffSizeSource.Resolution)
             {
                 falloffSize = (float)resolution - 1;
             }
-            */
-            float falloffSize = (float)resolution - 1;
 
             float[,] generatedMap;
 
