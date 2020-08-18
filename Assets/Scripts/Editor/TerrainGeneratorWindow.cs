@@ -17,6 +17,12 @@ namespace TerrainGenerator
 
         private Vector2 scrollPos;
 
+        [MenuItem("Window/Terrain Generator/Terrain Generator", false, 0)]
+        public static void OpenWindow()
+        {
+            GetWindow<TerrainGeneratorWindow>("Terrain Generator");
+        }
+
         public static void OpenWindow(TerrainGridData terrainGridData)
         {
             GetWindow<TerrainGeneratorWindow>("Terrain Generator");
@@ -55,7 +61,7 @@ namespace TerrainGenerator
         {
             if (GUILayout.Button("Create New Terrain Generator Data Asset"))
             {
-                CreateNewTerrainGeneratorDataAsset();
+                CreateNewTerrainGeneratorDataAsset(terrainGeneratorData);
             }
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
@@ -147,7 +153,7 @@ namespace TerrainGenerator
             EditorGUILayout.EndScrollView();
         }
 
-        private void CreateNewTerrainGeneratorDataAsset()
+        public static void CreateNewTerrainGeneratorDataAsset(TerrainGeneratorData terrainGeneratorData)
         {
             if (!AssetDatabase.IsValidFolder("Assets/Terrain Data"))
                 AssetDatabase.CreateFolder("Assets", "Terrain Data");
@@ -157,7 +163,7 @@ namespace TerrainGenerator
             if (!AssetDatabase.IsValidFolder($"Assets/Terrain Data/{currentSceneName}"))
                 AssetDatabase.CreateFolder("Assets/Terrain Data", currentSceneName);
 
-            terrainGeneratorData = (TerrainGeneratorData)ScriptableObject.CreateInstance(typeof(TerrainGeneratorData));
+            terrainGeneratorData = (TerrainGeneratorData)CreateInstance(typeof(TerrainGeneratorData));
 
             AssetDatabase.CreateAsset(terrainGeneratorData, $"Assets/Terrain Data/{currentSceneName} Terrain Generator Data.asset");
         }

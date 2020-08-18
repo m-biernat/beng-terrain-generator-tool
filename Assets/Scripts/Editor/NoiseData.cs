@@ -27,7 +27,7 @@ namespace TerrainGenerator
         public HeightModifierType heightModifierType;
         [Range(0.0f, 1.0f)]
         public float globalHeightModifier = 1.0f;
-        public AnimationCurve curveHeightModifier;
+        public AnimationCurve curveHeightModifier = AnimationCurve.Linear(0, 0, 1, 1);
 
         public bool Validate()
         {

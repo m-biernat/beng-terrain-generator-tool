@@ -1,55 +1,39 @@
 ﻿using UnityEngine;
 
-namespace TerrainGenerator.Hidden
+namespace TerrainGenerator.Debug
 {
-    public class HeightmapDebug : MonoBehaviour
+    public class HeightMapDebug : MonoBehaviour
     {
-        public Renderer noiseRenderer;
-        public string textureName = "_BaseMap";
-
-        [Space]
-        public int resolution = 33;
-
         [Space]
         public FalloffSizeSource falloffSizeSource;
         public float falloffSize = 32.0f;
 
-        [Space]
-        public NoiseData noiseData;
+        public static Texture2D texture;
 
-        [Space]
-        public FalloffData falloffData;
-
-        [Space]
-        public DebugType debugType;
-
-        public void DrawNoiseMap()
+        public static void DrawHeightMap(int resolution, DebugType debugType, TerrainGeneratorData terrainGeneratorData)
         {
-            if (resolution < 3)
-            {
-                Debug.LogError("Resolution must be greater than 3");
-                return;
-            }
-            
+            /*
             if (falloffSizeSource == FalloffSizeSource.Resolution)
             {
                 falloffSize = (float)resolution - 1;
             }
+            */
+            float falloffSize = (float)resolution - 1;
 
             float[,] generatedMap;
 
             switch (debugType)
             {
                 case DebugType.Noise:
-                    generatedMap = NoiseMap.Generate(resolution, noiseData, Unity.Mathematics.float2.zero);
+                    generatedMap = NoiseMap.Generate(resolution, terrainGeneratorData.noiseData, Unity.Mathematics.float2.zero);
                     break;
                 
                 case DebugType.Falloff:
-                    generatedMap = FalloffMap.Generate(resolution, falloffSize, falloffData);
+                    generatedMap = FalloffMap.Generate(resolution, falloffSize, terrainGeneratorData.falloffData);
                     break;
 
                 case DebugType.Combined:
-                    generatedMap = Combined();
+                    generatedMap = Combined(resolution, falloffSize, terrainGeneratorData);
                     break;
 
                 default:
@@ -59,7 +43,7 @@ namespace TerrainGenerator.Hidden
             if (generatedMap == null)
                 return;
 
-            Texture2D texture = new Texture2D(resolution, resolution);
+            texture = new Texture2D(resolution, resolution);
 
             texture.wrapMode = TextureWrapMode.Clamp;
             texture.filterMode = FilterMode.Point;
@@ -72,19 +56,13 @@ namespace TerrainGenerator.Hidden
 
             texture.SetPixels(colorMap);
             texture.Apply();
-
-            noiseRenderer.sharedMaterial.SetTexture(textureName, texture);
         }
 
-        private void OnValidate()
-        {
-            DrawNoiseMap();
-        }
 
-        private float[,] Combined()
+        private static float[,] Combined(int resolution, float falloffSize, TerrainGeneratorData terrainGeneratorData)
         {
-            float[,] noiseMap = NoiseMap.Generate(resolution, noiseData, Unity.Mathematics.float2.zero);
-            float[,] falloffMap = FalloffMap.Generate(resolution, falloffSize, falloffData);
+            float[,] noiseMap = NoiseMap.Generate(resolution, terrainGeneratorData.noiseData, Unity.Mathematics.float2.zero);
+            float[,] falloffMap = FalloffMap.Generate(resolution, falloffSize, terrainGeneratorData.falloffData);
 
             for (int y = 0; y < resolution; y++)
                 for (int x = 0; x < resolution; x++)

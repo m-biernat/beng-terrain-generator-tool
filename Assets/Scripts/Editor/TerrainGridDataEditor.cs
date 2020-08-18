@@ -49,14 +49,14 @@ namespace TerrainGenerator
             if (GUILayout.Button("Open Terrain Generator Window", GUILayout.Height(40)))
             {
                 if (terrainGridData.terrain.Count == 0)
-                    Debug.LogError("There is no Terrain Grid Root Object. Create one to proceed!");
+                    UnityEngine.Debug.LogError("There is no Terrain Grid Root Object. Create one to proceed!");
                 else
                     TerrainGeneratorWindow.OpenWindow(terrainGridData);
             }
         }
 
-        [MenuItem("GameObject/Terrain Grid", false, 11)]
-        private static void Init()
+        [MenuItem("GameObject/Terrain Generator/Terrain Grid", false, 0)]
+        private static void Create()
         {
             GameObject go = new GameObject("Terrain Grid");
             go.AddComponent<TerrainGridData>();
