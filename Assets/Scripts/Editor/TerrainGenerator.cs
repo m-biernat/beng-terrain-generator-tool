@@ -102,5 +102,17 @@ namespace TerrainGenerator
             else
                 return (tileOffset) => NoiseMap.Generate(resolution, noiseData, tileOffset);
         }
+
+        public static void GenerateSplatMap(TerrainGridData terrainGridData, TerrainGeneratorData terrainGeneratorData)
+        {
+            int count = (int)math.pow(terrainGridData.gridSideCount, 2);;
+
+            for (int i = 0; i < count; i++)
+            {
+                float[,,] generatedMap = SplatMap.Generate(terrainGridData.terrain[i].terrainData, terrainGeneratorData.splatMapData);
+
+                terrainGridData.terrain[i].terrainData.SetAlphamaps(0, 0, generatedMap);
+            }
+        }
     }
 }

@@ -90,7 +90,7 @@ namespace TerrainGenerator
 
                 if (GUILayout.Button("Generate\nSplatMap", GUILayout.Height(50), GUILayout.Width(150)))
                 {
-
+                    TerrainGenerator.GenerateSplatMap(terrainGridData, terrainGeneratorData);
                 }
             }
             else
