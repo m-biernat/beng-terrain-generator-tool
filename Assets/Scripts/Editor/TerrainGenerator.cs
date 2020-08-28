@@ -51,8 +51,6 @@ namespace TerrainGenerator
                     }, 
                     new object[] { tileOffset, i });
 
-                    Thread.Sleep(2);
-
                     /*
                     generatedMap = getHeightMap(tileOffset);
 

@@ -6,12 +6,6 @@ namespace TerrainGenerator
     {
         public static float[,] Generate(int resolution, NoiseData noiseData, float2 tileOffset)
         {
-            if (!noiseData.Validate())
-            {
-                UnityEngine.Debug.LogError("Noise Data is invalid.");
-                return null;
-            }
-
             float[,] noiseMap = new float[resolution, resolution];
 
             float halfSize = resolution / 2.0f;
@@ -77,8 +71,6 @@ namespace TerrainGenerator
                 minNoiseValue = -maxNoiseValue;
             }
 
-            //UnityEngine.Debug.Log($"{noiseData.extremaType} min: {minNoiseValue}; max: {maxNoiseValue}");
-
             System.Func<float, float> heightModifier = GetHeightModifierFunc(noiseData);
 
             for (int y = 0; y < resolution; y++)
@@ -110,6 +102,9 @@ namespace TerrainGenerator
 
         private static System.Func<float, float> GetHeightModifierFunc(NoiseData noiseData)
         {
+            UnityEngine.AnimationCurve curveHeightModifier = 
+                new UnityEngine.AnimationCurve(noiseData.curveHeightModifier.keys);
+
             switch (noiseData.heightModifierType)
             {
                 case HeightModifierType.None:
@@ -117,9 +112,9 @@ namespace TerrainGenerator
                 case HeightModifierType.Global:
                     return (float val) => { return noiseData.globalHeightModifier; };
                 case HeightModifierType.Curve:
-                    return (float val) => { return noiseData.curveHeightModifier.Evaluate(val); };
+                    return (float val) => { return curveHeightModifier.Evaluate(val); };
                 case HeightModifierType.Both:
-                    return (float val) => { return noiseData.globalHeightModifier * noiseData.curveHeightModifier.Evaluate(val); };
+                    return (float val) => { return noiseData.globalHeightModifier * curveHeightModifier.Evaluate(val); };
                 default:
                     return null;
             }
