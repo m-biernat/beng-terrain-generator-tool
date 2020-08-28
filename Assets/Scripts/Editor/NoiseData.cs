@@ -14,7 +14,7 @@ namespace TerrainGenerator
         public uint seed = uint.MaxValue;
 
         [Space]
-        public List<NoiseType> octaveNoiseType;
+        public List<Octave> octaves;
         public float amplitudeModifier = 0.5f;
         public float frequencyModifier = 2.0f;
 
@@ -35,13 +35,21 @@ namespace TerrainGenerator
                 return false;
             if (seed < 1)
                 return false;
-            if (octaveNoiseType.Count == 0)
+            if (octaves.Count == 0)
                 return false;
             if ((heightModifierType == HeightModifierType.Curve || heightModifierType == HeightModifierType.Both)
                 && curveHeightModifier.length == 0)
                 return false;
 
             return true;
+        }
+
+        [System.Serializable]
+        public class Octave
+        {
+            public NoiseType noiseType;
+            [Range(0.0f, 1.0f)]
+            public float weight = 1.0f;
         }
     }
 

@@ -10,7 +10,7 @@ namespace TerrainGenerator
 
             float halfSize = resolution / 2.0f;
 
-            int octaves = noiseData.octaveNoiseType.Count;
+            int octaves = noiseData.octaves.Count;
             float2[] octaveOffsets = new float2[octaves];
 
             Random rand = new Random(noiseData.seed);
@@ -41,8 +41,8 @@ namespace TerrainGenerator
                         sample.x = (x - halfSize + octaveOffsets[i].x) / noiseData.scale * frequency;
                         sample.y = (y - halfSize + octaveOffsets[i].y) / noiseData.scale * frequency;
 
-                        generateNoise = GetNoiseFunc(noiseData.octaveNoiseType[i]);
-                        noiseValue += generateNoise(sample) * amplitude;
+                        generateNoise = GetNoiseFunc(noiseData.octaves[i].noiseType);
+                        noiseValue += generateNoise(sample) * noiseData.octaves[i].weight * amplitude;
 
                         amplitude *= noiseData.amplitudeModifier;
                         frequency *= noiseData.frequencyModifier;
@@ -64,7 +64,7 @@ namespace TerrainGenerator
 
                 for (int i = 0; i < octaves; i++)
                 {
-                    maxNoiseValue += noiseData.extremumNoiseValue * amplitude;
+                    maxNoiseValue += noiseData.extremumNoiseValue * noiseData.octaves[i].weight * amplitude;
                     amplitude *= noiseData.amplitudeModifier;
                 }
 

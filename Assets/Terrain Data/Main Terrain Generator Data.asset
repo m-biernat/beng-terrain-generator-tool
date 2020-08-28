@@ -18,7 +18,13 @@ MonoBehaviour:
       x: 0
       y: 0
     seed: 4294967295
-    octaveNoiseType: 020000000100000001000000
+    octaves:
+    - noiseType: 2
+      weight: 1
+    - noiseType: 1
+      weight: 1
+    - noiseType: 1
+      weight: 1
     amplitudeModifier: 0.5
     frequencyModifier: 3
     extremaType: 1
@@ -57,3 +63,6 @@ MonoBehaviour:
     sharpness: 4.5
     scale: 2
     useFalloff: 1
+  splatMapData:
+    heightScaleModifier: 1
+    splatMapLayers: []
