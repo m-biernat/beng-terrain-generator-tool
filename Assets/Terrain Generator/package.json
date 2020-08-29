@@ -1,0 +1,18 @@
+{
+  "name": "com.biernat.terrain-generator",
+  "version": "1.0.0",
+  "displayName": "Terrain Generator",
+  "description": "Simple tool extending Unity Editor with procedural terrain generation.",
+  "unity": "2019.3",
+  "dependencies": {
+    "com.unity.mathematics": "1.1.0"
+  },
+  "keywords": [
+    "terrain",
+    "generator"
+  ],
+  "author": {
+    "name": "Micha\u0142 Biernat"
+  },
+  "type": "tool"
+}
