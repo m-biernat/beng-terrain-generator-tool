@@ -75,8 +75,11 @@ namespace TerrainGenerator
 
             if (terrainGeneratorData != null && terrainGridData != null)
             {
+                EditorGUI.BeginDisabledGroup(TerrainGenerator.isWorking);
+
                 if (GUILayout.Button("Generate\nHeightMap", GUILayout.Height(50), GUILayout.Width(150)))
                 {
+                    progressBarTitle = "Generating HeightMap";
                     TerrainGenerator.GenerateHeightMap(terrainGridData, terrainGeneratorData);
                 }
 
@@ -90,8 +93,11 @@ namespace TerrainGenerator
 
                 if (GUILayout.Button("Generate\nSplatMap", GUILayout.Height(50), GUILayout.Width(150)))
                 {
+                    progressBarTitle = "Generating SplatMap";
                     TerrainGenerator.GenerateSplatMap(terrainGridData, terrainGeneratorData);
                 }
+
+                EditorGUI.EndDisabledGroup();
             }
             else
             {
@@ -167,5 +173,60 @@ namespace TerrainGenerator
 
             AssetDatabase.CreateAsset(terrainGeneratorData, $"Assets/Terrain Data/{currentSceneName} Terrain Generator Data.asset");
         }
+
+        #region ProgressBar
+        private string progressBarTitle;
+        private double timeSinceStartup;
+
+        private void DisplayProgressBar()
+        {
+            EditorUtility.DisplayProgressBar(progressBarTitle,
+                $"Completed {TerrainGenerator.completedTasks} tasks of {TerrainGenerator.scheduledTasks}\t[{ElapsedTime()}]",
+                TerrainGenerator.completedTasks / (float)TerrainGenerator.scheduledTasks);
+
+            Repaint();
+        }
+
+        private void ClearProgressBar()
+        {
+            EditorUtility.ClearProgressBar();
+            Repaint();
+        }
+
+        private string ElapsedTime()
+        {
+            double time = EditorApplication.timeSinceStartup - timeSinceStartup;
+            return System.TimeSpan.FromSeconds(time).ToString().Remove(12);
+        }
+
+        private void OnEnable()
+        {
+            TerrainGenerator.onStart += OnTerrainGeneratorStart;
+            TerrainGenerator.onComplete += OnTerrainGeneratorComplete;
+        }
+
+        private void OnDisable()
+        {
+            TerrainGenerator.onStart -= OnTerrainGeneratorStart;
+            TerrainGenerator.onComplete -= OnTerrainGeneratorComplete;
+        }
+
+        private void OnTerrainGeneratorStart()
+        {
+            timeSinceStartup = EditorApplication.timeSinceStartup;
+        }
+
+        private void OnTerrainGeneratorComplete()
+        {
+            UnityEngine.Debug.Log($"Terrain Generator completed \"{progressBarTitle}\" in {ElapsedTime()}");
+            ClearProgressBar();
+        }
+
+        private void OnInspectorUpdate()
+        {
+            if (TerrainGenerator.isWorking)
+                DisplayProgressBar();
+        }
+        #endregion
     }
 }

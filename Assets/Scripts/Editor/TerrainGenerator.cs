@@ -6,8 +6,37 @@ namespace TerrainGenerator
 {
     public static class TerrainGenerator
     {
+        #region ProgressTracking
+        public static bool isWorking = false;
+        public static int completedTasks, scheduledTasks;
+
+        public static Action onStart, onComplete;
+
+        public static void Start(int numOfTasks)
+        {
+            isWorking = true;
+            completedTasks = 0;
+            scheduledTasks = numOfTasks;
+
+            onStart?.Invoke();
+        }
+
+        public static void CompleteTask()
+        {
+            completedTasks++;
+
+            if (completedTasks == scheduledTasks)
+            {
+                isWorking = false;
+                onComplete?.Invoke();
+            }
+        }
+        #endregion
+
         public static void GenerateHeightMap(TerrainGridData terrainGridData, TerrainGeneratorData terrainGeneratorData)
         {
+            Start(terrainGridData.terrain.Count);
+
             int resolution = terrainGridData.terrain[0].terrainData.heightmapResolution;
 
             int i = 0;
@@ -46,6 +75,7 @@ namespace TerrainGenerator
                         syncContext.Post(_ =>
                         {
                             terrainGridData.terrain[(int)args[1]].terrainData.SetHeights(0, 0, generatedMap);
+                            CompleteTask();
                         }, 
                         null);
                     }, 
@@ -103,13 +133,16 @@ namespace TerrainGenerator
 
         public static void GenerateSplatMap(TerrainGridData terrainGridData, TerrainGeneratorData terrainGeneratorData)
         {
-            int count = (int)math.pow(terrainGridData.gridSideCount, 2);;
+            Start(terrainGridData.terrain.Count);
+
+            int count = (int)math.pow(terrainGridData.gridSideCount, 2);
 
             for (int i = 0; i < count; i++)
             {
                 float[,,] generatedMap = SplatMap.Generate(terrainGridData.terrain[i].terrainData, terrainGeneratorData.splatMapData);
 
                 terrainGridData.terrain[i].terrainData.SetAlphamaps(0, 0, generatedMap);
+                CompleteTask();
             }
         }
     }
