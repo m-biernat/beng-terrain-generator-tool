@@ -20,8 +20,8 @@ namespace TerrainGenerator
                 {
                     float2 coord;
 
-                    coord.x = (float)y / resolution;
-                    coord.y = (float)x / resolution;
+                    coord.x = (y + 0.5f) / resolution;
+                    coord.y = (x + 0.5f) / resolution;
 
                     float height = terrainData.GetInterpolatedHeight(coord.x, coord.y) / heightScale;
 

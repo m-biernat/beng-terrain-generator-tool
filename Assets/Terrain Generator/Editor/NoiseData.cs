@@ -29,27 +29,38 @@ namespace TerrainGenerator
         public float globalHeightModifier = 1.0f;
         public AnimationCurve curveHeightModifier = AnimationCurve.Linear(0, 0, 1, 1);
 
-        public bool Validate()
-        {
-            if (scale <= 0.0f)
-                return false;
-            if (seed < 1)
-                return false;
-            if (octaves.Count == 0)
-                return false;
-            if ((heightModifierType == HeightModifierType.Curve || heightModifierType == HeightModifierType.Both)
-                && curveHeightModifier.length == 0)
-                return false;
-
-            return true;
-        }
-
         [System.Serializable]
         public class Octave
         {
             public NoiseType noiseType;
             [Range(0.0f, 1.0f)]
             public float weight = 1.0f;
+        }
+
+        public bool Validate()
+        {
+            List<string> errors = new List<string>();
+
+            if (scale <= 0.0f)
+                errors.Add("Scale have to be greater than 0");
+            if (seed < 1)
+                errors.Add("Seed have to be greater than 0");
+            if (octaves.Count == 0)
+                errors.Add("There must be at least 1 octave");
+            if (octaves.Count > 16)
+                errors.Add("Maximum number of octaves is 16");
+            if ((heightModifierType == HeightModifierType.Curve || heightModifierType == HeightModifierType.Both)
+                && curveHeightModifier.length == 0)
+                errors.Add("Curve Height Modifier cannot be empty");
+
+            if (errors.Count > 0)
+            {
+                UnityEngine.Debug.LogError($"[NoiseData] {errors.Count} error(s) found!");
+                errors.ForEach((msg) => UnityEngine.Debug.LogWarning(msg));
+                return false;
+            }    
+            else
+                return true;
         }
     }
 

@@ -35,6 +35,9 @@ namespace TerrainGenerator
 
         public static void GenerateHeightMap(TerrainGridData terrainGridData, TerrainGeneratorData terrainGeneratorData)
         {
+            if (!terrainGeneratorData.noiseData.Validate())
+                return;
+
             Start(terrainGridData.terrain.Count);
 
             int resolution = terrainGridData.terrain[0].terrainData.heightmapResolution;
@@ -133,6 +136,9 @@ namespace TerrainGenerator
 
         public static void GenerateSplatMap(TerrainGridData terrainGridData, TerrainGeneratorData terrainGeneratorData)
         {
+            if (!terrainGeneratorData.splatMapData.Validate(terrainGridData.terrain[0].terrainData.alphamapLayers))
+                return;
+
             Start(terrainGridData.terrain.Count);
 
             int count = (int)math.pow(terrainGridData.gridSideCount, 2);
