@@ -8,9 +8,9 @@ namespace TerrainGenerator
         public NoiseData noiseData;
 
         [Space]
-        public FalloffData falloffData;
+        public SplatMapData splatMapData;
 
         [Space]
-        public SplatMapData splatMapData;
+        public FalloffData falloffData;
     }
 }

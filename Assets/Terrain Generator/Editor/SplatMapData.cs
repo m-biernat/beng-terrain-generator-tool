@@ -33,16 +33,8 @@ namespace TerrainGenerator
     [System.Serializable]
     public class SplatMapLayer
     {
-        //public SplatWeightType splatWeightType;
-
         public AnimationCurve heightCurve;
         [Range(0, 1)]
         public float curveWeight = 1;
-    }
-
-    public enum SplatWeightType
-    {
-        Curve,
-        Steepness
     }
 }

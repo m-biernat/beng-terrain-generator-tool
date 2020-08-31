@@ -8,21 +8,13 @@ namespace TerrainGenerator
     {
         public FalloffType type;
 
-        public float2 offset;
-
-        public float sharpness = 3;
-        public float scale = 2.2f;
+        [Range(0, 1)]
+        public float a = 0.5f;
+        [Range(0, 1)]
+        public float b = 0.6f;
 
         [Space]
         public bool useFalloff = true;
-
-        public bool Validate()
-        {
-            if (scale <= 0)
-                return false;
-
-            return true;
-        }
     }
 
     public enum FalloffType

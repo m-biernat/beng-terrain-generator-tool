@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Unity.Mathematics;
 
 namespace TerrainGenerator.Debug
 {
@@ -8,6 +9,7 @@ namespace TerrainGenerator.Debug
 
         public static FalloffSizeSource falloffSizeSource = FalloffSizeSource.Resolution;
         public static float falloffSize = 32.0f;
+        public static float2 falloffOffset;
 
         public static Texture2D texture;
 
@@ -23,15 +25,21 @@ namespace TerrainGenerator.Debug
             switch (debugType)
             {
                 case DebugType.Noise:
-                    generatedMap = NoiseMap.Generate(resolution, terrainGeneratorData.noiseData, Unity.Mathematics.float2.zero);
+                    if (terrainGeneratorData.noiseData.Validate())
+                        generatedMap = NoiseMap.Generate(resolution, terrainGeneratorData.noiseData, float2.zero);
+                    else
+                        generatedMap = null;
                     break;
                 
                 case DebugType.Falloff:
-                    generatedMap = FalloffMap.Generate(resolution, falloffSize, terrainGeneratorData.falloffData);
+                    generatedMap = FalloffMap.Generate(resolution, falloffSize, falloffOffset, terrainGeneratorData.falloffData);
                     break;
 
                 case DebugType.Combined:
-                    generatedMap = Combined(resolution, falloffSize, terrainGeneratorData);
+                    if (terrainGeneratorData.noiseData.Validate())
+                        generatedMap = Combined(resolution, falloffSize, falloffOffset, terrainGeneratorData);
+                    else
+                        generatedMap = null;
                     break;
 
                 default:
@@ -57,10 +65,10 @@ namespace TerrainGenerator.Debug
         }
 
 
-        private static float[,] Combined(int resolution, float falloffSize, TerrainGeneratorData terrainGeneratorData)
+        private static float[,] Combined(int resolution, float falloffSize, float2 falloffOffset, TerrainGeneratorData terrainGeneratorData)
         {
-            float[,] noiseMap = NoiseMap.Generate(resolution, terrainGeneratorData.noiseData, Unity.Mathematics.float2.zero);
-            float[,] falloffMap = FalloffMap.Generate(resolution, falloffSize, terrainGeneratorData.falloffData);
+            float[,] noiseMap = NoiseMap.Generate(resolution, terrainGeneratorData.noiseData, float2.zero);
+            float[,] falloffMap = FalloffMap.Generate(resolution, falloffSize, falloffOffset, terrainGeneratorData.falloffData);
 
             for (int y = 0; y < resolution; y++)
                 for (int x = 0; x < resolution; x++)

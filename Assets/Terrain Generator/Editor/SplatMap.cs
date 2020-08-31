@@ -27,14 +27,9 @@ namespace TerrainGenerator
 
                     float sum = 0;
 
-                    //float steepness = terrainData.GetSteepness(coord.x, coord.y);
-
                     for (int i = 0; i < terrainData.alphamapLayers; i++)
                     {
                         splatWeights[i] = GetHeightCurveWeight(splatMapData.splatMapLayers[i], height);
-
-                        //splatWeights[i] = splatMapData.splatMapLayers[i].heightCurve.Evaluate(height) * splatMapData.splatMapLayers[i].curveWeight;
-                        //splatWeights[i] += 1.0f - math.clamp(steepness / 20, 0, 1);
 
                         sum += splatWeights[i];
                     }

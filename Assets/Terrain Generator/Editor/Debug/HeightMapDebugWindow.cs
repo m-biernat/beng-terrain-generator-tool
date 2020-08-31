@@ -97,6 +97,11 @@ namespace TerrainGenerator.Debug
                 HeightMapDebug.falloffSize = EditorGUILayout.FloatField("Falloff Size", HeightMapDebug.falloffSize);
                 GUILayout.EndHorizontal();
 
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(18);
+                HeightMapDebug.falloffOffset = EditorGUILayout.Vector2Field("Falloff Offset", HeightMapDebug.falloffOffset);
+                GUILayout.EndHorizontal();
+
                 EditorGUILayout.EndScrollView();
 
                 GUILayout.FlexibleSpace();

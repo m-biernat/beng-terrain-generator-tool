@@ -26,7 +26,7 @@ namespace TerrainGenerator
 
             float value = 1 - math.max(math.abs(sample.x), math.abs(sample.y));
 
-            return Modify(value, falloffData.sharpness, falloffData.scale);
+            return math.smoothstep(falloffData.a, falloffData.b, value);
         }
 
         public struct RadialData
@@ -50,12 +50,7 @@ namespace TerrainGenerator
 
             float value = 1 - (distance / size);
 
-            return Modify(value, falloffData.sharpness, falloffData.scale);
-        }
-
-        private static float Modify(float x, float a, float b)
-        {
-            return math.pow(x, a) / (math.pow(x, a) + math.pow(b - b * x, a));
+            return math.smoothstep(falloffData.a, falloffData.b, value);
         }
     }
 }

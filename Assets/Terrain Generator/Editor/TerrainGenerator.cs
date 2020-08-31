@@ -84,12 +84,6 @@ namespace TerrainGenerator
                     }, 
                     new object[] { tileOffset, i });
 
-                    /*
-                    generatedMap = getHeightMap(tileOffset);
-
-                    terrainGridData.terrain[i].terrainData.SetHeights(0, 0, generatedMap);
-                    */
-
                     tileOffset.y += falloffDiff;
                     i++;
                 }

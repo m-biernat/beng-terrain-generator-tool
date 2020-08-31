@@ -15,7 +15,9 @@ namespace TerrainGenerator
 
         [Space]
         public List<Octave> octaves;
+        [Range(0.0f, 1.0f)]
         public float amplitudeModifier = 0.5f;
+        [Range(1.0f, 10.0f)]
         public float frequencyModifier = 2.0f;
 
         [Space]
