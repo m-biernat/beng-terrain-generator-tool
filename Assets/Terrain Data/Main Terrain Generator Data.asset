@@ -55,14 +55,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  falloffData:
-    type: 0
-    offset:
-      x: 0
-      y: 0
-    sharpness: 4.5
-    scale: 2
-    useFalloff: 1
   splatMapData:
     heightScaleModifier: 1
     splatMapLayers:
@@ -137,3 +129,8 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 0
       curveWeight: 1
+  falloffData:
+    type: 0
+    a: 0.51
+    b: 0.85
+    useFalloff: 1
