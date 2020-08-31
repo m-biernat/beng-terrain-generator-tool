@@ -95,8 +95,10 @@ namespace TerrainGenerator
                     return noise.snoise;
                 case NoiseType.Cellular:
                     return (float2 P) => noise.cellular(P).x * 2 - 1;
-                case NoiseType.Ridge:
+                case NoiseType.Ridged:
                     return (float2 P) => (1.0f - math.abs(noise.cnoise(P))) * 2 - 1;
+                case NoiseType.Warped:
+                    return (float2 P) => noise.cnoise(P + noise.cnoise(P));
                 default:
                     return null;
             }

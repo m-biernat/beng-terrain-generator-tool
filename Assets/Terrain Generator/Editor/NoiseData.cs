@@ -71,7 +71,8 @@ namespace TerrainGenerator
         Perlin,
         Simplex,
         Cellular,
-        Ridge
+        Ridged,
+        Warped
     };
 
     public enum ExtremaType
