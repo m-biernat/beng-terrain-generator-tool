@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 namespace TerrainGenerator
 {
@@ -59,7 +60,7 @@ namespace TerrainGenerator
         private static void Create()
         {
             GameObject go = new GameObject("Terrain Grid");
-            go.AddComponent<TerrainGridData>();
+            go.AddComponent<TerrainGridData>().terrain = new List<Terrain>();
             go.isStatic = true;
         }
     }

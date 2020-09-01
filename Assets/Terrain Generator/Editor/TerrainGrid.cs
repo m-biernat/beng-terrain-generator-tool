@@ -36,6 +36,12 @@ namespace TerrainGenerator
 
         public static void UpdateGrid(Transform transform, TerrainGridData terrainGridData)
         {
+            if (terrainGridData.terrain.Count == 0)
+            {
+                UnityEngine.Debug.LogError("List of Terrain objects is empty!");
+                return;
+            }
+
             ResetTiles(1, terrainGridData);
 
             string currentSceneName = SceneManager.GetActiveScene().name;
@@ -88,6 +94,12 @@ namespace TerrainGenerator
 
         public static void RepositionTiles(TerrainGridData terrainGridData)
         {
+            if (terrainGridData.terrain.Count == 0)
+            {
+                UnityEngine.Debug.LogError("List of Terrain objects is empty!");
+                return;
+            }
+
             Vector3 rootPosition = terrainGridData.terrain[0].transform.localPosition;
             float tileSize = terrainGridData.terrain[0].terrainData.size.x;
 
