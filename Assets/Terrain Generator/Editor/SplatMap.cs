@@ -46,7 +46,7 @@ namespace TerrainGenerator
             return splatMap;
         }
 
-        private static float GetHeightCurveWeight(SplatMapLayer layer, float height)
+        private static float GetHeightCurveWeight(SplatMapData.Layer layer, float height)
         {
             return layer.heightCurve.Evaluate(height) * layer.curveWeight;
         }

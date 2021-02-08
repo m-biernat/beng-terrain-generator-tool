@@ -10,7 +10,15 @@ namespace TerrainGenerator
         public float heightScaleModifier = 1;
 
         [Space]
-        public List<SplatMapLayer> splatMapLayers;
+        public List<Layer> splatMapLayers;
+
+        [System.Serializable]
+        public class Layer
+        {
+            public AnimationCurve heightCurve;
+            [Range(0, 1)]
+            public float curveWeight = 1;
+        }
 
         public bool Validate(int layerCount)
         {
@@ -28,13 +36,5 @@ namespace TerrainGenerator
             else
                 return true;
         }
-    }
-
-    [System.Serializable]
-    public class SplatMapLayer
-    {
-        public AnimationCurve heightCurve;
-        [Range(0, 1)]
-        public float curveWeight = 1;
     }
 }

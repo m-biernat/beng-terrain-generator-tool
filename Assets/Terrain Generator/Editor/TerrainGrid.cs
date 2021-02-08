@@ -8,7 +8,7 @@ namespace TerrainGenerator
     {
         public static void CreateRootObject(Transform transform, TerrainGridData terrainGridData)
         {
-            if (terrainGridData.terrain.Count > 0 && terrainGridData.terrain[0])
+            if (terrainGridData.terrains.Count > 0 && terrainGridData.terrains[0])
                 return;
 
             if (!AssetDatabase.IsValidFolder("Assets/Terrain Data"))
@@ -29,14 +29,14 @@ namespace TerrainGenerator
 
             AssetDatabase.CreateAsset(terrainData, $"Assets/Terrain Data/{currentSceneName}/{name} TerrainTile 0.asset");
 
-            terrainGridData.terrain.Add(go.GetComponent<Terrain>());
+            terrainGridData.terrains.Add(go.GetComponent<Terrain>());
 
             RepositionTiles(terrainGridData);
         }
 
         public static void UpdateGrid(Transform transform, TerrainGridData terrainGridData)
         {
-            if (terrainGridData.terrain.Count == 0)
+            if (terrainGridData.terrains.Count == 0)
             {
                 UnityEngine.Debug.LogError("List of Terrain objects is empty!");
                 return;
@@ -65,7 +65,7 @@ namespace TerrainGenerator
                     go.transform.name = $"{name} TerrainTile {i}";
                     go.transform.parent = transform;
 
-                    terrainGridData.terrain.Add(go.GetComponent<Terrain>());
+                    terrainGridData.terrains.Add(go.GetComponent<Terrain>());
                 }
             }
 
@@ -76,32 +76,32 @@ namespace TerrainGenerator
         {
             string currentSceneName = SceneManager.GetActiveScene().name;
 
-            int terrainDataCount = terrainGridData.terrain.Count;
+            int terrainDataCount = terrainGridData.terrains.Count;
 
             if (terrainDataCount > startIndex)
             {
                 for (int i = startIndex; i < terrainDataCount; i++)
                 {
-                    string terrainObjectName = terrainGridData.terrain[i].transform.name;
+                    string terrainObjectName = terrainGridData.terrains[i].transform.name;
 
-                    DestroyImmediate(terrainGridData.terrain[i].gameObject);
+                    DestroyImmediate(terrainGridData.terrains[i].gameObject);
                     AssetDatabase.DeleteAsset($"Assets/Terrain Data/{currentSceneName}/{terrainObjectName}.asset");
                 }
 
-                terrainGridData.terrain.RemoveRange(startIndex, terrainDataCount - startIndex);
+                terrainGridData.terrains.RemoveRange(startIndex, terrainDataCount - startIndex);
             }
         }
 
         public static void RepositionTiles(TerrainGridData terrainGridData)
         {
-            if (terrainGridData.terrain.Count == 0)
+            if (terrainGridData.terrains.Count == 0)
             {
                 UnityEngine.Debug.LogError("List of Terrain objects is empty!");
                 return;
             }
 
-            Vector3 rootPosition = terrainGridData.terrain[0].transform.localPosition;
-            float tileSize = terrainGridData.terrain[0].terrainData.size.x;
+            Vector3 rootPosition = terrainGridData.terrains[0].transform.localPosition;
+            float tileSize = terrainGridData.terrains[0].terrainData.size.x;
 
             float xOffsetMultiplier = -(1 + 0.5f * (terrainGridData.gridSideCount - 2));
             float zOffsetMultiplier = 0.5f * (terrainGridData.gridSideCount - 2);
@@ -109,7 +109,7 @@ namespace TerrainGenerator
             rootPosition.x = tileSize * xOffsetMultiplier;
             rootPosition.z = tileSize * zOffsetMultiplier;
 
-            terrainGridData.terrain[0].transform.localPosition = rootPosition;
+            terrainGridData.terrains[0].transform.localPosition = rootPosition;
 
             if (terrainGridData.gridSideCount > 1)
             {
@@ -125,12 +125,12 @@ namespace TerrainGenerator
                         if (x == 0 && z == 0)
                             continue;
 
-                        Vector3 position = terrainGridData.terrain[i].transform.localPosition;
+                        Vector3 position = terrainGridData.terrains[i].transform.localPosition;
 
                         position.x = xOffset;
                         position.z = zOffset;
 
-                        terrainGridData.terrain[i].transform.position = position;
+                        terrainGridData.terrains[i].transform.position = position;
 
                         i++;
 

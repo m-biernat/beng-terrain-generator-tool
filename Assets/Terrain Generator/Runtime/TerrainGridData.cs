@@ -5,16 +5,9 @@ namespace TerrainGenerator
 {
     public class TerrainGridData : MonoBehaviour
     {
-        public List<Terrain> terrain;
+        public List<Terrain> terrains;
 
+        [Range(1, 64)]
         public int gridSideCount = 1;
-
-        public bool Validate()
-        {
-            if (gridSideCount < 1)
-                return false;
-            else
-                return true;
-        }
     }
 }

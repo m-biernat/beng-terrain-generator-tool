@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b146c038be67a1f418e691e31bcfcd34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrain:
+  terrains:
   - {fileID: 147526083}
   - {fileID: 1840338390}
   - {fileID: 841391654}

@@ -38,9 +38,9 @@ namespace TerrainGenerator
             if (!terrainGeneratorData.noiseData.Validate())
                 return;
 
-            Start(terrainGridData.terrain.Count);
+            Start(terrainGridData.terrains.Count);
 
-            int resolution = terrainGridData.terrain[0].terrainData.heightmapResolution;
+            int resolution = terrainGridData.terrains[0].terrainData.heightmapResolution;
 
             int i = 0;
             int count = terrainGridData.gridSideCount;
@@ -77,7 +77,7 @@ namespace TerrainGenerator
 
                         syncContext.Post(_ =>
                         {
-                            terrainGridData.terrain[(int)args[1]].terrainData.SetHeights(0, 0, generatedMap);
+                            terrainGridData.terrains[(int)args[1]].terrainData.SetHeights(0, 0, generatedMap);
                             CompleteTask();
                         }, 
                         null);
@@ -130,18 +130,18 @@ namespace TerrainGenerator
 
         public static void GenerateSplatMap(TerrainGridData terrainGridData, TerrainGeneratorData terrainGeneratorData)
         {
-            if (!terrainGeneratorData.splatMapData.Validate(terrainGridData.terrain[0].terrainData.alphamapLayers))
+            if (!terrainGeneratorData.splatMapData.Validate(terrainGridData.terrains[0].terrainData.alphamapLayers))
                 return;
 
-            Start(terrainGridData.terrain.Count);
+            Start(terrainGridData.terrains.Count);
 
             int count = (int)math.pow(terrainGridData.gridSideCount, 2);
 
             for (int i = 0; i < count; i++)
             {
-                float[,,] generatedMap = SplatMap.Generate(terrainGridData.terrain[i].terrainData, terrainGeneratorData.splatMapData);
+                float[,,] generatedMap = SplatMap.Generate(terrainGridData.terrains[i].terrainData, terrainGeneratorData.splatMapData);
 
-                terrainGridData.terrain[i].terrainData.SetAlphamaps(0, 0, generatedMap);
+                terrainGridData.terrains[i].terrainData.SetAlphamaps(0, 0, generatedMap);
                 CompleteTask();
             }
         }
