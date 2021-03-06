@@ -47,18 +47,18 @@ namespace TerrainGenerator
 
             float size = ((float)resolution - 1) * count;
 
-            int falloffDiff = resolution - 1;
-            float falloffBase = (float)falloffDiff / 2;
-            float tileOffsetValue = (count - 1) * falloffBase;
+            int tileOffsetStep = resolution - 1;
+            float tileOffsetHalf = (float)tileOffsetStep / 2;
+            float tileOffsetFull = (count - 1) * tileOffsetHalf;
 
             float2 tileOffset;
 
             if (count == 1)
                 tileOffset = new float2(0, 0);
             else if (count == 2)
-                tileOffset = new float2(falloffBase, -falloffBase);
+                tileOffset = new float2(tileOffsetHalf, -tileOffsetHalf);
             else
-                tileOffset = new float2(tileOffsetValue, -tileOffsetValue);
+                tileOffset = new float2(tileOffsetFull, -tileOffsetFull);
 
             Func<float2, float[,]> getHeightMap = 
                 GetHeightMapFunc(resolution, size, terrainGeneratorData.noiseData, terrainGeneratorData.falloffData);
@@ -84,11 +84,11 @@ namespace TerrainGenerator
                     }, 
                     new object[] { tileOffset, i });
 
-                    tileOffset.y += falloffDiff;
+                    tileOffset.y += tileOffsetStep;
                     i++;
                 }
-                tileOffset.y = -tileOffsetValue;
-                tileOffset.x -= falloffDiff;
+                tileOffset.y = -tileOffsetFull;
+                tileOffset.x -= tileOffsetStep;
             }
         }
 
@@ -99,7 +99,13 @@ namespace TerrainGenerator
                 return (tileOffset) =>
                 {
                     float[,] noiseMap = NoiseMap.Generate(resolution, noiseData, tileOffset);
+                    float[,] falloffMap = FalloffMap.Generate(resolution, size, tileOffset, falloffData);
 
+                    for (int y = 0; y < resolution; y++)
+                        for (int x = 0; x < resolution; x++)
+                            noiseMap[x, y] *= falloffMap[x, y];
+
+                    /*
                     Func<int, int, float> getFalloff;
 
                     if (falloffData.type == FalloffType.Rectangular)
@@ -120,6 +126,7 @@ namespace TerrainGenerator
                     for (int y = 0; y < resolution; y++)
                         for (int x = 0; x < resolution; x++)
                             noiseMap[x, y] *= getFalloff(x, y);
+                    */
 
                     return noiseMap;
                 };

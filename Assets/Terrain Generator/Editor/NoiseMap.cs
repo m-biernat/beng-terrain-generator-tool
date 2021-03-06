@@ -30,9 +30,7 @@ namespace TerrainGenerator
             {
                 for (int x = 0; x < resolution; x++)
                 {
-                    float amplitude = 1;
-                    float frequency = 1;
-                    float noiseValue = 0;
+                    float amplitude = 1, frequency = 1, noiseValue = 0;
 
                     for (int i = 0; i < octaves; i++)
                     {
